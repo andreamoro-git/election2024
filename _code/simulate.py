@@ -120,7 +120,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Create a figure and a set of subplots
-fig, ax = plt.subplots()
+fig, ax = plt.subplots( figsize=(8, 4))
 ax.set_title('Distribution of Harris Electoral Votes (average: ' + str(round(avgdemvotes, 1)) + ')')
 ax.set_xlabel('Electoral Votes')
 ax.set_ylabel('Frequency')
@@ -130,7 +130,7 @@ ax.set_ylim
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
-bins = np.append(np.arange(229,270,10),np.arange(270,380,10))
+bins = np.append(np.arange(219,270,10),np.arange(270,380,10))
 
 # compute frequencies'
 freq = []
@@ -163,6 +163,7 @@ for i in range(len(bins) - 1):
 
 
 ax.legend(handles= [ handles[bins[0]],handles[269],handles[bins[-2]]])
+fig.savefig(figdir+'harrisvotesdist.png', bbox_inches='tight')
 
 
 # %% 
