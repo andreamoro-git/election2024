@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Home
+title: '2024 Election Forecasts'
 landing-title: 'My 2024 election forecasts'
 description: null
 image: null
