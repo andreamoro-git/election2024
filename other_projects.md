@@ -10,7 +10,7 @@ nav-menu: true
 
 <!-- One -->
 <section id="one">
-<div class="wrapper">
+<div class="wrapper" markdown="1">
 * https://andreamoro.net My academic website
 * https://litconcordance.andreamoro.net Literary concordances
 * https://twitter.com/commedia_bot Commedia X bot (discontinued)
