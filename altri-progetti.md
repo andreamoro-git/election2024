@@ -1,8 +1,7 @@
 ---
-title: Altri progetti 
+title:  Other projects
 layout: progetti 
-description: altre cose di cui mi occupo
-image: assets/images/pic07.jpg
+description: other stuff I've done
 nav-menu: true
 ---
 
@@ -15,7 +14,9 @@ nav-menu: true
  <header class="major">
  <h2>Sed amet aliquam</h2>
 </header>
-* https://litconcordance.andreamoro.net
-* https://twitter.com/commedia_bot
+* https://www.andreamoro.net My academic website
+* https://litconcordance.andreamoro.net Literary concordances
+* https://twitter.com/commedia_bot Commedia X bot (discontinued)
+* https://presforecasts.andreamoro.net/ 2004/2008 Original Election forecasts
 </div>
 </section>
