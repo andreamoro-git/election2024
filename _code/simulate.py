@@ -4,6 +4,7 @@
 # and simulate election outconmes from the electoral college
 # and write the results to a file
 import pandas as pd
+import numpy as np
 import random
 from states import states, votes, stcode
 import math
@@ -31,8 +32,8 @@ numsamples = 20000
 htmlfile = 'try.html'
 emailfile = 'results.txt'
 statsfile = 'stats.raw'
-datadir = "datadir/"
-figdir = "figdir/"
+datadir = "data/"
+figdir = "../assets/"
 savedate = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
 # Initialize some variables
@@ -204,4 +205,6 @@ ax2.axhline(y=50, color='r', linestyle='--', xmin=0.04, xmax=0.97)
 plt.xticks(rotation=45)
 plt.show()
 
+# save figure
+fig.savefig(figdir+'harrisvotes.png', bbox_inches='tight')
 # %%

@@ -7,3 +7,5 @@ image: null
 author: null
 show_tile: false
 ---
+
+<img src = "assets/harrisvotes.png" />
