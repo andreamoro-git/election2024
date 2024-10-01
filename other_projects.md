@@ -10,13 +10,11 @@ nav-menu: true
 
 <!-- One -->
 <section id="one">
-<div class="inner">
- <header class="major">
- <h2>Sed amet aliquam</h2>
-</header>
-* https://www.andreamoro.net My academic website
+<div class="wrapper">
+* https://andreamoro.net My academic website
 * https://litconcordance.andreamoro.net Literary concordances
 * https://twitter.com/commedia_bot Commedia X bot (discontinued)
 * https://presforecasts.andreamoro.net/ 2004/2008 Original Election forecasts
+* https://andreamoro.net/blog Some blog posts
 </div>
 </section>
