@@ -22,4 +22,4 @@ jobs:
           pip install -r numpy
 
       - name: execute py script # run main.py
-        run: python main.py
+        run: python _code/simulate.py
