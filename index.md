@@ -7,5 +7,9 @@ image: null
 author: null
 show_tile: false
 ---
-
+<p>
 <img src = "assets/harrisvotes.png" />
+</p>
+<p>
+<img src = "assets/harrisvotesdist.png" />
+</p>
