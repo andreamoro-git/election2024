@@ -30,13 +30,7 @@ jobs:
 
       - name: execute py script # run main.py
         run: python _code/simulate.py
-
-      - name: create commit message
-        id: commit_message_step
-        run: date >> $GITHUB_OUTPUT
         
       - name: Commit files
         uses: stefanzweifel/git-auto-commit-action@v5
-        id: commit
-        with:
-          commit_message: ${{ steps.commit_message_step.outputs.commit_message }}
+
