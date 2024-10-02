@@ -26,10 +26,11 @@ jobs:
         run: python _code/simulate.py
 
       - name: Commit files
-        uses: actions/upload-artifact@v4
-        with:
-            path: assets/harrisvotes.png
-              assets/harrisvotesdist.png
+        uses: stefanzweifel/git-auto-commit-action@v5
+        # uses: actions/upload-artifact@v4
+        # with:
+        #     path: assets/harrisvotes.png
+        #       assets/harrisvotesdist.png
       #   id: commit
       #   run: |
       #     git config --local user.email "action@github.com"
