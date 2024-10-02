@@ -1,9 +1,9 @@
 name: simulate 
 
 on: 
-  workflow_dispatch
-  #schedule:
-  #  - cron: '0 0 * * 1' # At 00:00 on Monday
+  # workflow_dispatch
+  schedule:
+   - cron: '0 3 * * *' # At 00:00 on Monday
 
 jobs:
   build:
@@ -31,26 +31,12 @@ jobs:
       - name: execute py script # run main.py
         run: python _code/simulate.py
 
+      - name: create commit message
+        id: commit_message_step
+        run: date >> $GITHUB_OUTPUT
+        
       - name: Commit files
         uses: stefanzweifel/git-auto-commit-action@v5
-        # uses: actions/upload-artifact@v4
-        # with:
-        #     path: assets/harrisvotes.png
-        #       assets/harrisvotesdist.png
-      #   id: commit
-      #   run: |
-      #     git config --local user.email "action@github.com"
-      #     git config --local user.name "github-actions"
-      #     git add --all
-      #     if [-z "$(git status --porcelain)"]; then
-      #        echo "::set-output name=push::false"
-      #     else
-      #        git commit -m "Add changes" -a
-      #        echo "::set-output name=push::true"
-      #     fi
-      #   shell: bash
-      # - name: Push changes
-      #   if: steps.commit.outputs.push == 'true'
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #      github_token: ${{ secrets.GITHUB_TOKEN }}
+        id: commit
+        with:
+          commit_message: ${{ steps.commit_message_step.outputs.commit_message }}
