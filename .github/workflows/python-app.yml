@@ -8,6 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+  permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+    contents: write
+    
     steps:
       - name: checkout repo content
         uses: actions/checkout@v2 # checkout the repository content
