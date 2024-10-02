@@ -29,6 +29,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
             path: assets/harrisvotes.png
+            path: assets/harrisvotesdist.png
       #   id: commit
       #   run: |
       #     git config --local user.email "action@github.com"
