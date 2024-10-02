@@ -33,7 +33,7 @@ htmlfile = 'try.html'
 emailfile = 'results.txt'
 statsfile = 'stats.raw'
 datadir = "data/"
-figdir = "../assets/"
+figdir = "assets/"
 savedate = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
 # Initialize some variables
