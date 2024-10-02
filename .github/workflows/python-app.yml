@@ -1,9 +1,9 @@
 name: simulate 
 
 on: 
-  workflow_dispatch
-  # schedule:
-  #  - cron: '0 3 * * *' # At 00:00 on Monday
+  #workflow_dispatch
+  schedule:
+   - cron: '0 9 * * *' # At 03:00 every day
 
 jobs:
   build:
