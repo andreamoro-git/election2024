@@ -32,7 +32,7 @@ numsamples = 20000
 htmlfile = 'try.html'
 emailfile = 'results.txt'
 statsfile = 'stats.raw'
-datadir = "data/"
+datadir = "_code/data/"
 figdir = "assets/"
 savedate = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
