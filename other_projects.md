@@ -12,9 +12,9 @@ nav-menu: true
 <section id="one">
 <div class="wrapper" markdown="1">
 * [My academic website](https://andreamoro.net)
-* https://litconcordance.andreamoro.net Literary concordances
-* https://twitter.com/commedia_bot Commedia X bot (discontinued)
-* https://presforecasts.andreamoro.net/ 2004/2008 Original Election forecasts
-* https://andreamoro.net/blog Some blog posts
+* [Literary concordances](https://litconcordance.andreamoro.net)
+* [Commedia X bot (discontinued)](https://twitter.com/commedia_bot)
+* [2004/2008 Original Election forecasts](https://presforecasts.andreamoro.net/ )
+* [Some blog posts](https://andreamoro.net/blog)
 </div>
 </section>
