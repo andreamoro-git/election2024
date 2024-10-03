@@ -11,7 +11,7 @@ nav-menu: true
 <!-- One -->
 <section id="one">
 <div class="wrapper" markdown="1">
-* [https://andreamoro.net] My academic website
+* [My academic website](https://andreamoro.net)
 * https://litconcordance.andreamoro.net Literary concordances
 * https://twitter.com/commedia_bot Commedia X bot (discontinued)
 * https://presforecasts.andreamoro.net/ 2004/2008 Original Election forecasts
