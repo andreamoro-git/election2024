@@ -171,9 +171,6 @@ ax.set_ylabel('Frequency')
 #remove axis
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
-ax1.spines['top'].set_visible(False)
-ax1.spines['right'].set_visible(False)
-
 bins = np.append(np.arange(219,270,10),np.arange(270,370,10))
 
 # compute frequencies'
