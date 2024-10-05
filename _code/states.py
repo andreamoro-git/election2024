@@ -23,7 +23,7 @@ votes = {
     'Colorado': 10,
     'Connecticut': 7,
     'Delaware': 3,
-    'District of Columbia': 3,
+    'D.C.': 3,
     'Florida': 30,
     'Georgia': 16,
     'Hawaii': 4,

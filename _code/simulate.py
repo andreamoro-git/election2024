@@ -1,12 +1,13 @@
 #! /usr/bin/env python3
 #%% 
+# simulate 2024 election outcomes
 # get data of polls by state from url
 # and simulate election outconmes from the electoral college
 # and write the results to a file
 import pandas as pd
 import numpy as np
 import random
-from states import states, votes, nsurls
+from states import votes, nsurls
 from datetime import datetime
 from urllib.request import Request, urlopen
 
@@ -29,10 +30,12 @@ savedate = datetime.now().strftime("%Y-%m-%d")
 
 random.seed(1234)
 fullnames = {'ev': 'electoral-vote', 'ns': 'natesilver'}
+states = votes.keys()
 
 
 
-#%% get the polls data
+#%% 
+# get the polls data
 
 # start with the electoral-vote data
 url_electoralvote = 'https://www.electoral-vote.com/evp2024/Pres/pres_polls.csv'
@@ -40,7 +43,9 @@ url_electoralvote = 'https://www.electoral-vote.com/evp2024/Pres/pres_polls.csv'
 req = Request(url_electoralvote, headers= {"User-Agent" : "Mozilla/5.0"})
 polls  = pd.read_csv(urlopen(req))
 polls['source'] = 'ev'
-polls['Date'] = polls['Date'].apply(lambda x: datetime.strptime(x, '%b %d').strftime('%m-%d'))
+
+# reformat month from Apr to 04
+polls['Date'] = polls['Date'].apply(lambda x: datetime.strptime(x, '%b %d').strftime('2024-%m-%d'))
 
 # continue with natesilver data  state by state
 for key in nsurls.keys():
@@ -48,56 +53,67 @@ for key in nsurls.keys():
     polls_ns = pd.read_csv(urlopen(req))
     polls_ns = polls_ns.rename(columns={'state':'State', 'trump':'GOP', 'harris':'Dem', 'modeldate': 'Date' })
     polls_ns['source'] = 'ns'
-    polls_ns['Date'] = polls_ns['Date'].apply(lambda x: datetime.strptime(x, '%m/%d/%y').strftime('%m-%d'))
+    polls_ns['Date'] = polls_ns['Date'].apply(lambda x: datetime.strptime(x, '%m/%d/%y').strftime('%Y-%m-%d'))
 
     # concat the dataframe to the  polls dataframe
     polls = pd.concat([polls,polls_ns], ignore_index=True)
 
+polls = polls[['Date','State','Dem','GOP','source','Pollster','trump_poll','harris_poll']]
+polls['dayssince'] = polls['Date'].apply(lambda x: (datetime.now()- datetime.strptime(x, '%Y-%m-%d')).days)
+
+# sort polls by state and date
+polls = polls.sort_values(by=['State','dayssince'], ascending=True)
+#%% 
+# do the average of last 4 polls for ev
+n_polls_keep = 4
+latestEV = polls[polls['source']=='ev'].groupby(['State']).head(n_polls_keep)
+
+# keep only the average by state, add the numeric_only option
+latestEV = latestEV[['Dem','GOP','State']].groupby(['State']).mean()
+
+# remove index and make it a column
+latestEV.reset_index(inplace=True)
+latestEV['source'] = 'ev'
+latestEV = latestEV[['Dem','GOP','source','State']]
+
+date = polls[polls['source']=='ev'].groupby(['State']).head(1)
+date = date[['Date','dayssince','State']]
+
+#merge dfs
+latestEV = latestEV.merge(date, on='State')
+
 #%%
-# create a dictionary of shares of votes by source and state
-shares = {}
-for source in fullnames.keys():
-    shares[source] = {}  # Assuming poll data is available
-    for state in states:
-        shares[source][state] = {}
-        # skip if DC
-        if state == 'District of Columbia':
-            shares[source][state]['GOP'] = 0
-            shares[source][state]['Dem'] = 1
-            shares[source][state]['share'] = 0
-            shares[source][state]['moe'] = moe_if_missing
-            continue
+# take the latest for ns
+latestNS = polls[polls['source']=='ns'].groupby(['State']).head(1)
 
-        # set to 3 for now
-        shares[source][state]['moe'] = moe_if_missing
+# keep only the average by state, add the numeric_only option
+latestNS = latestNS[['Dem','GOP','State']].groupby(['State']).mean()
+# remove index and make it a column
+latestNS.reset_index(inplace=True)
+latestNS['source'] = 'ns'
+latestNS = latestNS[['Dem','GOP','source','State']]
 
-for state in states:
-    # check if a state is available in the dataframe
-    # and if so compute shares
-    if len(polls[(polls['source']=='ev') & (polls['State']==state)]) != 0:
-        # index 0 is the most recent poll in the electoral-vote data
-        shares['ev'][state]['GOP'] = polls[(polls['source']=='ev') & (polls['State']==state)].iloc[0]['GOP']
-        shares['ev'][state]['Dem'] = polls[(polls['source']=='ev') & (polls['State']==state)].iloc[0]['Dem']
-    if len(polls[(polls['source']=='ns') & (polls['State']==state)]) != 0:
+date = polls[polls['source']=='ns'].groupby(['State']).head(1)
+date = date[['Date','dayssince','State']]
 
-        # index -1 is the most recent poll in the natesilver data
-        # could do a date check here
-        shares['ns'][state]['GOP'] = polls[(polls['source']=='ns') & (polls['State']==state)].iloc[-1]['GOP']
-        shares['ns'][state]['Dem'] = polls[(polls['source']=='ns') & (polls['State']==state)].iloc[-1]['Dem']
+#merge dfs
+latestNS = latestNS.merge(date, on='State')
 
-for source in fullnames.keys():
-    for state in states:
-        #check if key exists
-        if 'GOP' in shares[source][state].keys():
-            shares[source][state]['share'] = shares[source][state]['GOP'] / (shares[source][state]['GOP'] + shares[source][state]['Dem'])
-        else:
-            shares[source][state]['share'] = shares['ev'][state]['share']
+latest = pd.concat([latestEV, latestNS])
 
-# verify all states have shares
-for source in fullnames.keys():
-    for state in states:
-        if 'share' not in shares[source][state].keys():
-            print('No share for ' + state + ' in ' + source)
+# add shareGOP and moe
+latest['shareGOP'] = latest['GOP'] / (latest['Dem'] + latest['GOP'])
+latest['moe'] = moe_if_missing
+
+# convert long to wide
+latest = latest.set_index(['source','State'])
+latest = latest.unstack('source')
+latest.columns = ['{}_{}'.format(var, source) for var, source in latest.columns]
+
+# fill missing values
+latest['shareGOP_ns']=latest['shareGOP_ns'].fillna(latest['shareGOP_ev'])
+latest['moe_ns']=latest['moe_ns'].fillna(latest['moe_ev'])
+
 
 # now simulate outcomes 
 
@@ -106,9 +122,12 @@ def simulate(source):
     repwin = 0
     tie = 0
     
+    shs = 'shareGOP_' + source
+    mos = 'moe_' + source
+
     # Generate random draws for all states and samples at once
-    means = np.array([shares[source][state]['share'] for state in states])
-    std_devs = np.array([shares[source][state]['moe'] / 200 for state in states])
+    means = latest[shs] #np.array([shares[source][state]['share'] for state in states])
+    std_devs = latest[mos]/200 #np.array([shares[source][state]['moe'] / 200 for state in states])
     draws = np.random.normal(means, std_devs, (numsamples, len(states)))
 
     # Determine which states are won by Republicans for each sample
@@ -158,7 +177,6 @@ df.to_csv( datadir+'harrisvotes.csv', index=False)
 
 #%% 
 # plot the distribution of electoral votes
-# without using seaborn
 import matplotlib.pyplot as plt
 import numpy as np
 
