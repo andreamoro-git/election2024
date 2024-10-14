@@ -258,11 +258,15 @@ ax2.spines['right'].set_visible(False)
 df['dm'] = df['date'].str[5:10]
 ax.plot(df[df['source']=='ev']['dm'], df[df['source']=='ev']['demvotes'], label='electoral-vote', color='blue')
 ax.plot(df[df['source']=='ns']['dm'], df[df['source']=='ns']['demvotes'], ':', label='natesilver', color='blue')
-ax.set_title('Dem expected electoral votes')
-ax2.set_title('Dem win probability')
+ax.set_title('Harris expected electoral votes')
+ax2.set_title('Harris win probability')
 ax.set_xlabel('Date')
 ax.set_ylabel('Electoral Votes')
 ax.set_ylim(270-70, 270+70)
+# tilt the x-axis labels 45 degrees
+ax.set_xticklabels(df['dm'], rotation=45)
+ax2.set_xticklabels(df['dm'], rotation=45)
+
 ax.set_yticks(np.arange(210, 331, 20))
 ax2.set_ylim(0, 100)
 ax2.plot(df[df['source']=='ev']['dm'], df[df['source']=='ev']['demprob'], color='blue', linestyle='-',)
