@@ -264,8 +264,8 @@ ax.set_xlabel('Date')
 ax.set_ylabel('Electoral Votes')
 ax.set_ylim(270-70, 270+70)
 # tilt the x-axis labels 45 degrees
-ax.set_xticklabels(df['dm'], rotation=45)
-ax2.set_xticklabels(df['dm'], rotation=45)
+ax.set_xticklabels(df[df['source']=='ev']['dm'], rotation=45)
+ax2.set_xticklabels(df[df['source']=='ev']['dm'], rotation=45)
 
 ax.set_yticks(np.arange(210, 331, 20))
 ax2.set_ylim(0, 100)
