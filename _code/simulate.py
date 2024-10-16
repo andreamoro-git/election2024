@@ -32,8 +32,6 @@ random.seed(1234)
 fullnames = {'ev': 'electoral-vote', 'ns': 'natesilver'}
 states = votes.keys()
 
-
-
 #%% 
 # get the polls data
 
@@ -114,9 +112,7 @@ latest.columns = ['{}_{}'.format(var, source) for var, source in latest.columns]
 latest['shareGOP_ns']=latest['shareGOP_ns'].fillna(latest['shareGOP_ev'])
 latest['moe_ns']=latest['moe_ns'].fillna(latest['moe_ev'])
 
-
 # now simulate outcomes 
-
 def simulate(source):
     dem_votes_all = []
     repwin = 0
@@ -244,7 +240,6 @@ legend2 = ax.legend(handles= [ handles2[bins[0]],handles2[269],handles2[bins[-2]
 ax.add_artist(legend1)
 fig.savefig(figdir+'harrisvotesdist.png', bbox_inches='tight')
 
-
 # %%
 # plot a figure of harrisvotes by date from the data frame
 fig, (ax,ax2) = plt.subplots(1,2, figsize=(8,3))
@@ -265,8 +260,6 @@ ax.set_ylim(270-70, 270+70)
 # tilt the x-axis labels 45 degrees
 ax.tick_params(axis='x', labelrotation=45)
 ax2.tick_params(axis='x', labelrotation=45)
-
-
 ax.set_yticks(np.arange(210, 331, 20))
 ax2.set_ylim(0, 100)
 ax2.plot(df[df['source']=='ev']['dm'], df[df['source']=='ev']['demprob'], color='blue', linestyle='-',)
@@ -282,4 +275,3 @@ plt.show()
 # save figure
 fig.savefig(figdir+'harrisvotes.png', bbox_inches='tight')
 
-# %%
