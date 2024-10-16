@@ -189,10 +189,9 @@ ax.set_ylabel('Frequency')
 #remove axis
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
-bins = np.append(np.arange(219,270,10),np.arange(270,370,10))
+bins = np.append(np.arange(199,270,10),np.arange(270,370,10))
 
-# compute frequencies'
-
+# compute frequencies
 freq = {}
 for source in fullnames.keys():
     dem_votes_all = allsims[source]
