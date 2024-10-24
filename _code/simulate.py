@@ -63,7 +63,7 @@ polls['dayssince'] = polls['Date'].apply(lambda x: (datetime.now()- datetime.str
 polls = polls.sort_values(by=['State','dayssince'], ascending=True)
 #%% 
 # do the average of last 4 polls for ev
-n_polls_keep = 4
+n_polls_keep = 3
 latestEV = polls[polls['source']=='ev'].groupby(['State']).head(n_polls_keep)
 
 # keep only the average by state, add the numeric_only option
@@ -163,12 +163,12 @@ try:
         if 'ev' not in df[df['date']==savedate]['source'].values:
             # use concat instead of append
             df = pd.concat([df, pd.DataFrame({'date':savedate,**stats['ev'],'source':'ev'}, index=[0])], ignore_index=True)
-        if 'ns' not in df[df['date']==savedate]['source'].values:
-            df = pd.concat([df, pd.DataFrame({'date':savedate,**stats['ns'],'source':'ns'}, index=[0])], ignore_index=True)
+        # if 'ns' not in df[df['date']==savedate]['source'].values:
+        #     df = pd.concat([df, pd.DataFrame({'date':savedate,**stats['ns'],'source':'ns'}, index=[0])], ignore_index=True)
 except:
     print('aa')
     df = pd.DataFrame({'date':savedate,**stats['ev'],'source':'ev'})
-    df = pd.concat([df, pd.DataFrame({'date':savedate,**stats['ns'],'source':'ns'}, index=[0])], ignore_index=True)
+ #   df = pd.concat([df, pd.DataFrame({'date':savedate,**stats['ns'],'source':'ns'}, index=[0])], ignore_index=True)
 
 df.to_csv( datadir+'harrisvotes.csv', index=False)
 
