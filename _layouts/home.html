@@ -17,11 +17,10 @@
 
         <!-- One -->
         <div class="page-content">
-        <p> Forecasts, straight from the polls. 
+        <p> Forecasts, straight from the polls. If the polls are wrong, forecasts are wrong, sorry!
             <a href="https://andreamoro.net/assets/otherdocs/wsj_4nov04_pollcalc-followup.pdf">No fancy adjusting</a>. Polls from 
-            <a href="http://electoral-vote.com">electoral-vote.com</a> and 
-            <a href="http://natesilver.net">natesilver.net</a>.
-            May add more sources soon. Methodology 
+            <a href="http://electoral-vote.com">electoral-vote.com</a> 
+            May add more sources Methodology 
             <a href="https://presidentforecast.andreamoro.net/docs/methodology.html">essentially the same as in my 2004-2008 sites</a>
         </p>
         <p> Updated daily
@@ -30,7 +29,9 @@
                 <p>{{ content }}</p>
             </div>
             <div class="inner">
-                {% include battleground_polls.html %}
+		Polls used in the last update:
+		    
+                {% include state_polls.html %}
             </div>
 
         </div>
