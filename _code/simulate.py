@@ -298,22 +298,33 @@ state_polls.columns = pd.MultiIndex.from_tuples([
     ('Electoral-Vote', 'GOP %')
 ])
 
-# Define a function to apply background color based on GOP %
+# Format GOP % to 2 decimal places
+state_polls['Electoral-Vote', 'GOP %'] = state_polls['Electoral-Vote', 'GOP %'].map('{:.2f}'.format)
+
+# Define a function to apply background color and font color based on GOP %
 def color_gop(val):
+    val = float(val)  # Convert the formatted string back to float for comparison
     if val < 0.46:
         color = 'blue'
+        font_color = 'white'
     elif val < 0.48:
         color = 'lightblue'
+        font_color = 'black'
     elif val > 0.54:
         color = 'red'
+        font_color = 'black'
     elif val > 0.52:
         color = 'lightpink'
+        font_color = 'black'
     else:
         color = 'white'
-    return f'background-color: {color}'
+        font_color = 'black'
+    return f'background-color: {color}; color: {font_color}'
 
-# Apply the function to the 'GOP %' column
-styled_table = state_polls.style.applymap(color_gop, subset=pd.IndexSlice[:, ('Electoral-Vote', 'GOP %')])
+# Apply the function to the 'GOP %' column and set cell padding
+styled_table = state_polls.style.applymap(color_gop, subset=pd.IndexSlice[:, ('Electoral-Vote', 'GOP %')]).set_table_styles(
+    [{'selector': 'td', 'props': [('padding', '2px')]}]
+)
 
 # Convert the styled table to HTML
 html_table = styled_table.to_html()
@@ -323,4 +334,5 @@ html_file_path = '_includes/'+'state_polls.html'
 with open(html_file_path, 'w') as file:
     file.write(html_table)
 
-print(html_table)
+
+# %%
