@@ -29,7 +29,7 @@ figdir = "assets/"
 savedate = datetime.now().strftime("%Y-%m-%d")
 
 random.seed(1234)
-fullnames = {'ev': 'electoral-vote', 'ns': 'natesilver'}
+fullnames = {'ev': 'electoral-vote'} #, 'ns': 'natesilver'}
 states = votes.keys()
 
 #%% 
@@ -82,22 +82,23 @@ latestEV = latestEV.merge(date, on='State')
 
 #%%
 # take the latest for ns
-latestNS = polls[polls['source']=='ns'].groupby(['State']).head(1)
+# latestNS = polls[polls['source']=='ns'].groupby(['State']).head(1)
 
-# keep only the average by state, add the numeric_only option
-latestNS = latestNS[['Dem','GOP','State']].groupby(['State']).mean()
-# remove index and make it a column
-latestNS.reset_index(inplace=True)
-latestNS['source'] = 'ns'
-latestNS = latestNS[['Dem','GOP','source','State']]
+# # keep only the average by state, add the numeric_only option
+# latestNS = latestNS[['Dem','GOP','State']].groupby(['State']).mean()
+# # remove index and make it a column
+# latestNS.reset_index(inplace=True)
+# latestNS['source'] = 'ns'
+# latestNS = latestNS[['Dem','GOP','source','State']]
 
-date = polls[polls['source']=='ns'].groupby(['State']).head(1)
-date = date[['Date','dayssince','State']]
+# date = polls[polls['source']=='ns'].groupby(['State']).head(1)
+# date = date[['Date','dayssince','State']]
 
-#merge dfs
-latestNS = latestNS.merge(date, on='State')
+# #merge dfs
+# latestNS = latestNS.merge(date, on='State')
 
-latest = pd.concat([latestEV, latestNS])
+# latest = pd.concat([latestEV, latestNS])
+latest = latestEV # legacy in case I add more sources
 
 # add shareGOP and moe
 latest['shareGOP'] = latest['GOP'] / (latest['Dem'] + latest['GOP'])
@@ -109,8 +110,8 @@ latest = latest.unstack('source')
 latest.columns = ['{}_{}'.format(var, source) for var, source in latest.columns]
 
 # fill missing values
-latest['shareGOP_ns']=latest['shareGOP_ns'].fillna(latest['shareGOP_ev'])
-latest['moe_ns']=latest['moe_ns'].fillna(latest['moe_ev'])
+#latest['shareGOP_ns']=latest['shareGOP_ns'].fillna(latest['shareGOP_ev'])
+#latest['moe_ns']=latest['moe_ns'].fillna(latest['moe_ev'])
 
 # now simulate outcomes 
 def simulate(source):
@@ -149,7 +150,7 @@ def simulate(source):
 stats = {}
 allsims = {}
 stats['ev'], allsims['ev'] = simulate('ev')
-stats['ns'], allsims['ns'] = simulate('ns')
+#stats['ns'], allsims['ns'] = simulate('ns')
 
 for source in fullnames.keys():
     print(source, stats[source])
@@ -223,26 +224,26 @@ for i in range(len(bins) - 1):
     if bins[i] < 269:
         handles[bins[i]] = ax.bar(bins[i]+5, freq['ev'][i], color=colors[i], width=9, label=replabel['ev'], alpha=1)
         # draw empty bars for natesilver
-        handles2[bins[i]] = ax.bar(bins[i]+5, -freq['ns'][i], color=colors[i], width=9, label=replabel['ns'], hatch='.')
+ #       handles2[bins[i]] = ax.bar(bins[i]+5, -freq['ns'][i], color=colors[i], width=9, label=replabel['ns'], hatch='.')
     elif bins[i] == 269:
         handles[bins[i]] = ax.bar(bins[i]+.5, freq['ev'][i], color=colors[i], width=1, label=tielabel['ev'], alpha=1)
-        handles2[bins[i]] = ax.bar(bins[i]+.5, -freq['ns'][i], color=colors[i], width=1, label=tielabel['ns'],  hatch='.')
+ #       handles2[bins[i]] = ax.bar(bins[i]+.5, -freq['ns'][i], color=colors[i], width=1, label=tielabel['ns'],  hatch='.')
     else:
         handles[bins[i]] = ax.bar(bins[i]+5, freq['ev'][i], color=colors[i], width=9, label=demlabel['ev'], alpha=1)
-        handles2[bins[i]] = ax.bar(bins[i]+5, -freq['ns'][i], color=colors[i], width=9, label=demlabel['ns'],  hatch='.')
+ #       handles2[bins[i]] = ax.bar(bins[i]+5, -freq['ns'][i], color=colors[i], width=9, label=demlabel['ns'],  hatch='.')
 
 #horizontal line at 0
 ax.axhline(y=0, color='black', linestyle='-', xmin=0.04, xmax=0.97)
 legend1 = ax.legend(handles= [ handles[bins[0]],handles[269],handles[bins[-2]]], title='electoral-vote '+'average: ' + str(round(stats['ev']['demvotes'], 1)))
 
 # draw a second legend
-legend2 = ax.legend(handles= [ handles2[bins[0]],handles2[269],handles2[bins[-2]]], loc='lower right', title='natesilver ''average: ' + str(round(stats['ns']['demvotes'], 1)))
+#legend2 = ax.legend(handles= [ handles2[bins[0]],handles2[269],handles2[bins[-2]]], loc='lower right', title='natesilver ''average: ' + str(round(stats['ns']['demvotes'], 1)))
 ax.add_artist(legend1)
 fig.savefig(figdir+'harrisvotesdist.png', bbox_inches='tight')
 
 # %%
 # plot a figure of harrisvotes by date from the data frame
-fig, (ax,ax2) = plt.subplots(1,2, figsize=(8,3))
+fig, (ax, ax2) = plt.subplots(1,2, figsize=(8,3))
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax2.spines['top'].set_visible(False)
@@ -251,7 +252,7 @@ ax2.spines['right'].set_visible(False)
 # substring the date ecolumn to get the month and day
 df['dm'] = df['date'].str[5:10]
 ax.plot(df[df['source']=='ev']['dm'], df[df['source']=='ev']['demvotes'], label='electoral-vote', color='blue')
-ax.plot(df[df['source']=='ns']['dm'], df[df['source']=='ns']['demvotes'], ':', label='natesilver', color='blue')
+#ax.plot(df[df['source']=='ns']['dm'], df[df['source']=='ns']['demvotes'], ':', label='natesilver', color='blue')
 ax.set_title('Harris expected electoral votes')
 ax2.set_title('Harris win probability')
 ax.set_xlabel('Date')
@@ -263,7 +264,7 @@ ax2.tick_params(axis='x', labelrotation=45)
 ax.set_yticks(np.arange(210, 331, 20))
 ax2.set_ylim(0, 100)
 ax2.plot(df[df['source']=='ev']['dm'], df[df['source']=='ev']['demprob'], color='blue', linestyle='-',)
-ax2.plot(df[df['source']=='ns']['dm'], df[df['source']=='ns']['demprob'], color='blue', linestyle=':', )
+#ax2.plot(df[df['source']=='ns']['dm'], df[df['source']=='ns']['demprob'], color='blue', linestyle=':', )
 fig.legend(bbox_to_anchor=(.6,.4))
 
 # horizontal line ties
@@ -275,3 +276,51 @@ plt.show()
 # save figure
 fig.savefig(figdir+'harrisvotes.png', bbox_inches='tight')
 
+# %% 
+# create and save an html table with the state polls and share GOPs
+
+# Reorder columns to have State first and remove source columns
+state_polls = latestEV[['State', 'Dem', 'GOP', 'Date']]
+
+# Calculate GOP percentage and round it to 2 decimals
+with pd.option_context('mode.chained_assignment', None):
+    state_polls['GOP %'] = state_polls['GOP'] / (state_polls['Dem'] + state_polls['GOP'])
+
+# Sort the table by GOP%
+state_polls = state_polls.sort_values(by='GOP %', ascending=False)
+
+# Create an HTML table with multi-level columns
+state_polls.columns = pd.MultiIndex.from_tuples([
+    ('', 'State'),
+    ('Electoral-Vote', 'Dem'),
+    ('Electoral-Vote', 'GOP'),
+    ('Electoral-Vote', 'Date'),
+    ('Electoral-Vote', 'GOP %')
+])
+
+# Define a function to apply background color based on GOP %
+def color_gop(val):
+    if val < 0.46:
+        color = 'blue'
+    elif val < 0.48:
+        color = 'lightblue'
+    elif val > 0.54:
+        color = 'red'
+    elif val > 0.52:
+        color = 'lightpink'
+    else:
+        color = 'white'
+    return f'background-color: {color}'
+
+# Apply the function to the 'GOP %' column
+styled_table = state_polls.style.applymap(color_gop, subset=pd.IndexSlice[:, ('Electoral-Vote', 'GOP %')])
+
+# Convert the styled table to HTML
+html_table = styled_table.to_html()
+
+# Save the HTML table to a file
+html_file_path = '_includes/'+'state_polls.html'
+with open(html_file_path, 'w') as file:
+    file.write(html_table)
+
+print(html_table)
