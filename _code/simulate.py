@@ -327,7 +327,7 @@ styled_table = state_polls.style.applymap(color_gop, subset=pd.IndexSlice[:, ('E
 )
 
 # Convert the styled table to HTML
-html_table = styled_table.to_html()
+html_table = styled_table.hide(axis='index').to_html()
 
 # Save the HTML table to a file
 html_file_path = '_includes/'+'state_polls.html'
